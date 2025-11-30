@@ -6,13 +6,19 @@ export interface User {
   role: string;
 }
 
+export enum Gender {
+  MALE = 'male',
+  FEMALE = 'female',
+  OTHER = 'other',
+}
+
 export interface Patient {
   id: string;
   firstName: string;
   lastName: string;
   dateOfBirth: Date | string;
   weight: number;
-  gender: 'male' | 'female' | 'other';
+  gender: Gender | 'male' | 'female' | 'other';
   diagnoses: { text: string; isMain: boolean }[];
   allergies: string[];
   roomNumber?: string;

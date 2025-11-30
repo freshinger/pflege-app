@@ -1,7 +1,6 @@
 'use client';
 
 import { useAuth } from '@/contexts/AuthContext';
-import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { TodaysTodos } from '@/components/dashboard/todays-todos';
 
