@@ -44,7 +44,10 @@ const patientSchema = z.object({
   dateOfBirth: z.string().refine((date) => new Date(date).toString() !== 'Invalid Date', {
     message: 'Ungültiges Datum',
   }),
-  weight: z.coerce.number().min(0.1, 'Gewicht muss größer als 0 sein'),
+  weight: z.string().refine((val) => {
+    const num = parseFloat(val);
+    return !isNaN(num) && num >= 0.1;
+  }, 'Gewicht muss größer als 0 sein'),
   gender: z.enum(['male', 'female', 'other']),
   roomNumber: z.string().optional(),
   notes: z.string().optional(),
@@ -88,7 +91,7 @@ export function PatientDialog({
       firstName: '',
       lastName: '',
       dateOfBirth: '',
-      weight: 0,
+      weight: '0',
       gender: 'male',
       roomNumber: '',
       notes: '',
@@ -101,7 +104,7 @@ export function PatientDialog({
         firstName: patient.firstName,
         lastName: patient.lastName,
         dateOfBirth: new Date(patient.dateOfBirth).toISOString().split('T')[0],
-        weight: patient.weight,
+        weight: String(patient.weight),
         gender: patient.gender,
         roomNumber: patient.roomNumber || '',
         notes: patient.notes || '',
@@ -134,7 +137,7 @@ export function PatientDialog({
         firstName: '',
         lastName: '',
         dateOfBirth: '',
-        weight: 0,
+        weight: '0',
         gender: 'male',
         roomNumber: '',
         notes: '',
@@ -168,6 +171,7 @@ export function PatientDialog({
 
     await onSubmit({
       ...data,
+      weight: parseFloat(data.weight),
       diagnoses: diagnoses.map((d) => ({ text: d.text.trim(), isMain: d.isMain })),
       allergies: allergies.map((a) => a.text.trim()).filter((a) => a !== ''),
     });
